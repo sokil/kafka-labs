@@ -11,7 +11,7 @@ services:
       args:
         PHP_IMAGE_TAG: 7.4-cli
     volumes:
-      - ./src:/app
+      - ./:/app
 
   kafka_broker1:
     image: bitnami/kafka

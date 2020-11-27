@@ -8,4 +8,4 @@ RUN apt update && \
     docker-php-ext-enable rdkafka && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer.phar
 
-CMD ["php", "/app/consumer.php"]
+CMD ["php", "/app/src/consumer.php"]
