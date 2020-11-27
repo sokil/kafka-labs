@@ -38,8 +38,6 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - kafka_zookeeper
-    volumes:
-      - ./shared/kafkaBroker2:/bitnami/kafka
 
   kafka_zookeeper:
     image: zookeeper
