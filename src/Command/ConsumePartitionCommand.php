@@ -70,8 +70,9 @@ class ConsumePartitionCommand extends Command
             $msg = $topic->consume($partition, 1000);
 
             $output->write(sprintf(
-                'Message consumed from topic <info>%s</info>: ',
-                $topicName
+                'Message consumed from topic <info>%s</info> and partition <info>%s</info>: ',
+                $topicName,
+                $partition
             ));
 
             if (null === $msg || $msg->err === RD_KAFKA_RESP_ERR__PARTITION_EOF) {
