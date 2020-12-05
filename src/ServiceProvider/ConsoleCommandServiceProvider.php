@@ -5,28 +5,31 @@ declare(strict_types=1);
 namespace Sokil\KafkaLabs\ServiceProvider;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
-use Sokil\KafkaLabs\Command\ConsumeCommand;
+use Sokil\KafkaLabs\Command\ConsumePartitionCommand;
 use Sokil\KafkaLabs\Command\ProduceCommand;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 
 class ConsoleCommandServiceProvider extends AbstractServiceProvider
 {
+    private const COMMAND_NAME_CONSUME_PARTITION = 'consumePartition';
+    private const COMMAND_NAME_PRODUCE = 'produce';
+
     protected $provides = [
         ProduceCommand::class,
-        ConsumeCommand::class,
+        ConsumePartitionCommand::class,
         'consoleCommandLocator'
     ];
 
     public function register()
     {
         $this->getLeagueContainer()
-            ->add(ConsumeCommand::class)
-            ->addArgument('consumer')
-            ->addArgument('kafkaConsumer');
+            ->add(ConsumePartitionCommand::class)
+            ->addArgument(self::COMMAND_NAME_CONSUME_PARTITION)
+            ->addArgument('kafkaLowLevelConsumer');
 
         $this->getLeagueContainer()
             ->add(ProduceCommand::class)
-            ->addArgument('producer')
+            ->addArgument(self::COMMAND_NAME_PRODUCE)
             ->addArgument('kafkaProducer');
 
         $this->getLeagueContainer()
@@ -36,8 +39,8 @@ class ConsoleCommandServiceProvider extends AbstractServiceProvider
             )
             ->addArgument($this->getLeagueContainer())
             ->addArgument([
-                'consumer' => ConsumeCommand::class,
-                'producer' => ProduceCommand::class,
+                self::COMMAND_NAME_CONSUME_PARTITION => ConsumePartitionCommand::class,
+                self::COMMAND_NAME_PRODUCE => ProduceCommand::class,
             ]);
 
     }

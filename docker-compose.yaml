@@ -12,7 +12,7 @@ services:
         PHP_IMAGE_TAG: 7.4-cli
     volumes:
       - ./:/app
-    entrypoint: ["php", "/app/src/consumer.php"]
+    entrypoint: ["php", "/app/bin/app.php consumePartition"]
 
   kafka_php_producer:
     hostname: kafka_php_producer
@@ -24,7 +24,7 @@ services:
         PHP_IMAGE_TAG: 7.4-cli
     volumes:
       - ./:/app
-    entrypoint: ["php", "/app/src/producer.php"]
+    entrypoint: ["php", "/app/bin/app.php produce"]
 
   kafka_broker1:
     image: bitnami/kafka

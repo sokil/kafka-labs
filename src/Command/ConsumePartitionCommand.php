@@ -8,9 +8,10 @@ use RdKafka\Consumer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConsumeCommand extends Command
+class ConsumePartitionCommand extends Command
 {
     private Consumer $consumer;
 
@@ -27,7 +28,19 @@ class ConsumeCommand extends Command
 
     protected function configure()
     {
-        $this->addArgument('topicName', InputArgument::REQUIRED, 'Topic name');
+        $this
+            ->addArgument(
+                'topicName',
+                InputArgument::REQUIRED,
+                'Topic name'
+            )
+            ->addOption(
+                'partition',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Partition id',
+                0
+            );
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
@@ -37,6 +50,13 @@ class ConsumeCommand extends Command
             throw new \RuntimeException('Topic name not specified');
         }
 
+        $partition = $input->getArgument('partition');
+        if (!is_numeric($partition)) {
+            throw new \RuntimeException('Topic name not specified');
+        }
+
+        $partition = (int)$partition;
+
         $topic = $this->consumer->newTopic($topicName);
 
         /**
@@ -44,7 +64,7 @@ class ConsumeCommand extends Command
          */
         $consumptionStartPosition = RD_KAFKA_OFFSET_BEGINNING;
 
-        $topic->consumeStart(0, $consumptionStartPosition);
+        $topic->consumeStart($partition, $consumptionStartPosition);
 
         while (true) {
             $msg = $topic->consume(0, 1000);

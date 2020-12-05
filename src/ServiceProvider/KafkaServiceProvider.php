@@ -59,7 +59,7 @@ class KafkaServiceProvider extends AbstractServiceProvider
          * @link https://github.com/arnaud-lb/php-rdkafka#consumer-settings
          */
         $kafkaConsumerConfig = [
-            'group.id' => '',
+            'group.id' => 'someConsumerGroup',
             'log_level' => (string) LOG_WARNING,
             'offset.store.method' => 'broker',
         ];
@@ -97,7 +97,7 @@ class KafkaServiceProvider extends AbstractServiceProvider
          */
         $this->getLeagueContainer()
             ->add(
-                'kafkaConsumer',
+                'kafkaLowLevelConsumer',
                 Consumer::class
             )
             ->addArgument('kafkaConsumerConfig')
