@@ -2,9 +2,9 @@ version: '3.3'
 
 services:
 
-  kafka_php_consumer:
-    hostname: kafka_php_consumer
-    container_name: kafka_php_consumer
+  kafkalabs_php_consumer:
+    hostname: kafkalabs_php_consumer
+    container_name: kafkalabs_php_consumer
     build:
       context: .
       dockerfile: Dockerfile-php
@@ -13,7 +13,7 @@ services:
     image: kafkalabs_php_consumer
     volumes:
       - ./:/app
-    entrypoint: ["php", "/app/bin/app.php consumePartition"]
+    entrypoint: ["php", "/app/bin/app.php", "consumePartition", "someTopic"]
     depends_on:
       - kafkalabs_broker1
       - kafkalabs_broker2
@@ -30,7 +30,7 @@ services:
     image: kafkalabs_php_producer
     volumes:
       - ./:/app
-    entrypoint: ["php", "/app/bin/app.php produce"]
+    entrypoint: ["php", "/app/bin/app.php", "produce", "someTopic"]
     depends_on:
       - kafkalabs_broker1
       - kafkalabs_broker2
