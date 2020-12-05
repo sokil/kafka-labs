@@ -6,15 +6,21 @@ namespace Sokil\KafkaLabs\ServiceProvider;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use RdKafka\Conf;
-use RdKafka\Consumer;
+use RdKafka\Consumer as KafkaLowLevelConsumer;
 use RdKafka\Producer;
 
 class KafkaServiceProvider extends AbstractServiceProvider
 {
+    public const SERVICE_NAME_PRODUCER_CONFIG = 'kafkaProducerConfig';
+    public const SERVICE_NAME_CONSUMER_CONFIG = 'kafkaConsumerConfig';
+    public const SERVICE_NAME_PRODUCER = 'kafkaProducer';
+    public const SERVICE_NAME_LOW_LEVEL_CONSUMER = 'kafkaLowLevelConsumer';
+
     protected $provides = [
-        'kafkaConfig',
-        'kafkaProducer',
-        'kafkaConsumer'
+        self::SERVICE_NAME_PRODUCER_CONFIG,
+        self::SERVICE_NAME_CONSUMER_CONFIG,
+        self::SERVICE_NAME_PRODUCER,
+        self::SERVICE_NAME_LOW_LEVEL_CONSUMER,
     ];
 
     public function register()
@@ -38,7 +44,7 @@ class KafkaServiceProvider extends AbstractServiceProvider
 
         $kafkaProducerConfigDefinition = $this->getLeagueContainer()
             ->add(
-                'kafkaProducerConfig',
+                self::SERVICE_NAME_PRODUCER_CONFIG,
                 Conf::class
             );
 
@@ -67,7 +73,7 @@ class KafkaServiceProvider extends AbstractServiceProvider
 
         $kafkaConsumerConfigDefinition = $this->getLeagueContainer()
             ->add(
-                'kafkaConsumerConfig',
+                self::SERVICE_NAME_CONSUMER_CONFIG,
                 Conf::class
             );
 
@@ -86,7 +92,7 @@ class KafkaServiceProvider extends AbstractServiceProvider
          */
         $this->getLeagueContainer()
             ->add(
-                'kafkaProducer',
+                self::SERVICE_NAME_PRODUCER,
                 Producer::class
             )
             ->addArgument('kafkaProducerConfig')
@@ -97,8 +103,8 @@ class KafkaServiceProvider extends AbstractServiceProvider
          */
         $this->getLeagueContainer()
             ->add(
-                'kafkaLowLevelConsumer',
-                Consumer::class
+                self::SERVICE_NAME_LOW_LEVEL_CONSUMER,
+                KafkaLowLevelConsumer::class
             )
             ->addArgument('kafkaConsumerConfig')
             ->addMethodCall('addBrokers', [$kafkaBrokers]);

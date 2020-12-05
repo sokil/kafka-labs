@@ -25,12 +25,12 @@ class ConsoleCommandServiceProvider extends AbstractServiceProvider
         $this->getLeagueContainer()
             ->add(ConsumePartitionCommand::class)
             ->addArgument(self::COMMAND_NAME_CONSUME_PARTITION)
-            ->addArgument('kafkaLowLevelConsumer');
+            ->addArgument(KafkaServiceProvider::SERVICE_NAME_LOW_LEVEL_CONSUMER);
 
         $this->getLeagueContainer()
             ->add(ProduceCommand::class)
             ->addArgument(self::COMMAND_NAME_PRODUCE)
-            ->addArgument('kafkaProducer');
+            ->addArgument(KafkaServiceProvider::SERVICE_NAME_PRODUCER);
 
         $this->getLeagueContainer()
             ->add(

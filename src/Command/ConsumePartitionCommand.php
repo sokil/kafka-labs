@@ -50,7 +50,7 @@ class ConsumePartitionCommand extends Command
             throw new \RuntimeException('Topic name not specified');
         }
 
-        $partition = $input->getArgument('partition');
+        $partition = $input->getOption('partition');
         if (!is_numeric($partition)) {
             throw new \RuntimeException('Topic name not specified');
         }
