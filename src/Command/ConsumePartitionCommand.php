@@ -67,7 +67,7 @@ class ConsumePartitionCommand extends Command
         $topic->consumeStart($partition, $consumptionStartPosition);
 
         while (true) {
-            $msg = $topic->consume(0, 1000);
+            $msg = $topic->consume($partition, 1000);
 
             $output->write(sprintf(
                 'Message consumed from topic <info>%s</info>: ',
