@@ -43,7 +43,7 @@ services:
     ports:
       - '9093:9092'
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=kafka_zookeeper:2181
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=kafkalabs_zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - kafkalabs_zookeeper
