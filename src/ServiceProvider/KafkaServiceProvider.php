@@ -30,6 +30,60 @@ class KafkaServiceProvider extends AbstractServiceProvider
             throw new \RuntimeException('Kafka brokers not configured');
         }
 
+        $this->registerLowLevelConsumer($kafkaBrokers);
+        $this->registerHighLevelConsumer($kafkaBrokers);
+        $this->registerProducer($kafkaBrokers);
+    }
+
+    private function registerLowLevelConsumer(string $kafkaBrokers): void
+    {
+        /**
+         * Define consumer config
+         *
+         * @link https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
+         * @link https://github.com/arnaud-lb/php-rdkafka#consumer-settings
+         */
+        $kafkaConsumerConfig = [
+            'group.id' => 'someConsumerGroup',
+            'log_level' => (string) LOG_WARNING,
+            'offset.store.method' => 'broker',
+        ];
+
+        $kafkaConsumerConfigDefinition = $this->getLeagueContainer()
+            ->add(
+                self::SERVICE_NAME_CONSUMER_CONFIG,
+                Conf::class
+            );
+
+        foreach ($kafkaConsumerConfig as $kafkaConfigParam => $kafkaConfigValue) {
+            $kafkaConsumerConfigDefinition->addMethodCall(
+                'set',
+                [
+                    $kafkaConfigParam,
+                    $kafkaConfigValue
+                ]
+            );
+        }
+
+        /**
+         * Define consumer
+         */
+        $this->getLeagueContainer()
+            ->add(
+                self::SERVICE_NAME_LOW_LEVEL_CONSUMER,
+                KafkaLowLevelConsumer::class
+            )
+            ->addArgument('kafkaConsumerConfig')
+            ->addMethodCall('addBrokers', [$kafkaBrokers]);
+    }
+
+    private function registerHighLevelConsumer(string $kafkaBrokers): void
+    {
+        
+    }
+
+    private function registerProducer(string $kafkaBrokers): void
+    {
         /**
          * Define producer config
          *
@@ -59,35 +113,6 @@ class KafkaServiceProvider extends AbstractServiceProvider
         }
 
         /**
-         * Define consumer config
-         *
-         * @link https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
-         * @link https://github.com/arnaud-lb/php-rdkafka#consumer-settings
-         */
-        $kafkaConsumerConfig = [
-            'group.id' => 'someConsumerGroup',
-            'log_level' => (string) LOG_WARNING,
-            'offset.store.method' => 'broker',
-        ];
-
-
-        $kafkaConsumerConfigDefinition = $this->getLeagueContainer()
-            ->add(
-                self::SERVICE_NAME_CONSUMER_CONFIG,
-                Conf::class
-            );
-
-        foreach ($kafkaConsumerConfig as $kafkaConfigParam => $kafkaConfigValue) {
-            $kafkaConsumerConfigDefinition->addMethodCall(
-                'set',
-                [
-                    $kafkaConfigParam,
-                    $kafkaConfigValue
-                ]
-            );
-        }
-
-        /**
          * Define producer
          */
         $this->getLeagueContainer()
@@ -96,17 +121,6 @@ class KafkaServiceProvider extends AbstractServiceProvider
                 Producer::class
             )
             ->addArgument('kafkaProducerConfig')
-            ->addMethodCall('addBrokers', [$kafkaBrokers]);
-
-        /**
-         * Define consumer
-         */
-        $this->getLeagueContainer()
-            ->add(
-                self::SERVICE_NAME_LOW_LEVEL_CONSUMER,
-                KafkaLowLevelConsumer::class
-            )
-            ->addArgument('kafkaConsumerConfig')
             ->addMethodCall('addBrokers', [$kafkaBrokers]);
     }
 }

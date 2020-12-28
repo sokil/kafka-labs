@@ -60,8 +60,12 @@ services:
     ports:
       - '9093:9092'
     environment:
+      - KAFKA_CFG_BROCKER_ID=1
       - KAFKA_CFG_ZOOKEEPER_CONNECT=kafkalabs_zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - "./docker/kafka/server.properties:/opt/bitnami/kafka/config/server.properties"
+      - "./docker/kafka/zookeeper.properties:/opt/bitnami/kafka/config/zookeeper.properties"
     depends_on:
       - kafkalabs_zookeeper
 
@@ -72,8 +76,12 @@ services:
     ports:
       - '9094:9092'
     environment:
+      - KAFKA_CFG_BROCKER_ID=2
       - KAFKA_CFG_ZOOKEEPER_CONNECT=kafkalabs_zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - "./docker/kafka/server.properties:/opt/bitnami/kafka/config/server.properties"
+      - "./docker/kafka/zookeeper.properties:/opt/bitnami/kafka/config/zookeeper.properties"
     depends_on:
       - kafkalabs_zookeeper
 
@@ -84,8 +92,12 @@ services:
     ports:
       - '9095:9092'
     environment:
+      - KAFKA_CFG_BROCKER_ID=3
       - KAFKA_CFG_ZOOKEEPER_CONNECT=kafkalabs_zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - "./docker/kafka/server.properties:/opt/bitnami/kafka/config/server.properties"
+      - "./docker/kafka/zookeeper.properties:/opt/bitnami/kafka/config/zookeeper.properties"
     depends_on:
       - kafkalabs_zookeeper
 

@@ -77,7 +77,7 @@ class ConsumePartitionCommand extends Command
 
             if (null === $msg || $msg->err === RD_KAFKA_RESP_ERR__PARTITION_EOF) {
                 // Constant check required by librdkafka 0.11.6. Newer librdkafka versions will return NULL instead.
-                $output->writeln('No message');
+                $output->writeln('No message, waiting next...');
                 sleep(1);
                 continue;
             } elseif ($msg->err) {
