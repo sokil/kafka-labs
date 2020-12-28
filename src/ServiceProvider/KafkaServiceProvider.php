@@ -77,6 +77,11 @@ class KafkaServiceProvider extends AbstractServiceProvider
             ->addMethodCall('addBrokers', [$kafkaBrokers]);
     }
 
+    /**
+     * @link https://arnaud.le-blanc.net/php-rdkafka-doc/phpdoc/rdkafka.examples-high-level-consumer.html
+     *
+     * @param string $kafkaBrokers
+     */
     private function registerHighLevelConsumer(string $kafkaBrokers): void
     {
 
