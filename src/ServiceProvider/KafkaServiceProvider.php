@@ -79,7 +79,7 @@ class KafkaServiceProvider extends AbstractServiceProvider
 
     private function registerHighLevelConsumer(string $kafkaBrokers): void
     {
-        
+
     }
 
     private function registerProducer(string $kafkaBrokers): void
