@@ -49,6 +49,7 @@ class ProduceCommand extends Command
                 \json_encode(
                     [
                         'time' => time(),
+                        'hostname' => gethostname(),
                     ]
                 )
             );

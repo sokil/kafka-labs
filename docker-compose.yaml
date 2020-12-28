@@ -7,7 +7,7 @@ services:
     container_name: kafkalabs_php_consumer
     build:
       context: .
-      dockerfile: Dockerfile-php
+      dockerfile: docker/php/Dockerfile
       args:
         PHP_IMAGE_TAG: 7.4-cli
     image: kafkalabs_php_consumer
@@ -19,12 +19,29 @@ services:
       - kafkalabs_broker2
       - kafkalabs_broker3
 
-  kafkalabs_php_producer:
-    hostname: kafkalabs_php_producer
-    container_name: kafkalabs_php_producer
+  kafkalabs_php_producer1:
+    hostname: kafkalabs_php_producer1
+    container_name: kafkalabs_php_producer1
     build:
       context: .
-      dockerfile: Dockerfile-php
+      dockerfile: docker/php/Dockerfile
+      args:
+        PHP_IMAGE_TAG: 7.4-cli
+    image: kafkalabs_php_producer
+    volumes:
+      - ./:/app
+    entrypoint: ["php", "/app/bin/app.php", "produce", "someTopic"]
+    depends_on:
+      - kafkalabs_broker1
+      - kafkalabs_broker2
+      - kafkalabs_broker3
+
+  kafkalabs_php_producer2:
+    hostname: kafkalabs_php_producer2
+    container_name: kafkalabs_php_producer2
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
       args:
         PHP_IMAGE_TAG: 7.4-cli
     image: kafkalabs_php_producer
